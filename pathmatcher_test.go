@@ -37,6 +37,18 @@ func TestPathExtraction(t *testing.T) {
 			expectedMatch: true,
 		},
 		{
+			name: "match multiple variables",
+			patterns: []string{
+				"/organisation/{orgid}/user/{userid}/edit",
+			},
+			inputURL: "/organisation/123/user/456/edit",
+			expectedVariables: map[string]string{
+				"orgid":  "123",
+				"userid": "456",
+			},
+			expectedMatch: true,
+		},
+		{
 			name: "multiple patterns, no match",
 			patterns: []string{
 				"/user/{userid}",
@@ -46,6 +58,17 @@ func TestPathExtraction(t *testing.T) {
 			inputURL:          "/something/123/",
 			expectedVariables: nil,
 			expectedMatch:     false,
+		},
+		{
+			name: "wildcard prefix",
+			patterns: []string{
+				"*/{userid}",
+			},
+			inputURL: "/something/123/",
+			expectedVariables: map[string]string{
+				"userid": "123",
+			},
+			expectedMatch: true,
 		},
 	}
 

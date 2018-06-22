@@ -7,10 +7,15 @@ import "strings"
 type Segment struct {
 	Name       string
 	IsVariable bool
+	IsWildcard bool
 }
 
 // Match on the string path segment.
 func (ps *Segment) Match(s string) (name string, capture bool, matches bool) {
+	if ps.IsWildcard {
+		matches = true
+		return
+	}
 	if ps.IsVariable {
 		name = ps.Name
 		capture = true

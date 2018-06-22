@@ -16,6 +16,9 @@ func NewRoute(pattern string) *Route {
 		ps := &Segment{
 			Name: seg,
 		}
+		if seg == "*" {
+			ps.IsWildcard = true
+		}
 		if strings.HasPrefix(seg, "{") && strings.HasSuffix(seg, "}") {
 			ps.IsVariable = true
 			ps.Name = strings.TrimSuffix(strings.TrimPrefix(seg, "{"), "}")
