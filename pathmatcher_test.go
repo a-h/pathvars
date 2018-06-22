@@ -26,6 +26,17 @@ func TestPathExtraction(t *testing.T) {
 			expectedMatch: true,
 		},
 		{
+			name: "full URL, not just the path",
+			patterns: []string{
+				"https://subdomain.example.com/user/{userid}",
+			},
+			inputURL: "/user/123",
+			expectedVariables: map[string]string{
+				"userid": "123",
+			},
+			expectedMatch: true,
+		},
+		{
 			name: "match single variable, with trailing slash",
 			patterns: []string{
 				"/user/{userid}",

@@ -23,7 +23,7 @@ func NewExtractor(patterns ...string) *Extractor {
 
 // Extract variables from the path.
 func (pm *Extractor) Extract(u *url.URL) (v map[string]string, ok bool) {
-	s := u.String()
+	s := u.Path
 	s = strings.TrimSuffix(s, "/")
 	s = strings.TrimPrefix(s, "/")
 	segments := strings.Split(s, "/")
