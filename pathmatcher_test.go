@@ -28,9 +28,9 @@ func TestPathExtraction(t *testing.T) {
 		{
 			name: "full URL, not just the path",
 			patterns: []string{
-				"https://subdomain.example.com/user/{userid}",
+				"/user/{userid}",
 			},
-			inputURL: "/user/123",
+			inputURL: "https://subdomain.example.com/user/123",
 			expectedVariables: map[string]string{
 				"userid": "123",
 			},
@@ -80,6 +80,47 @@ func TestPathExtraction(t *testing.T) {
 				"userid": "123",
 			},
 			expectedMatch: true,
+		},
+		{
+			name: "multi-level wildcard prefix 1",
+			patterns: []string{
+				"*/{userid}",
+			},
+			inputURL: "/prefix/something/123/",
+			expectedVariables: map[string]string{
+				"userid": "123",
+			},
+			expectedMatch: true,
+		},
+		{
+			name: "multi-level wildcard prefix 2",
+			patterns: []string{
+				"*/thing/{userid}",
+			},
+			inputURL: "/another/prefix/something/thing/123/",
+			expectedVariables: map[string]string{
+				"userid": "123",
+			},
+			expectedMatch: true,
+		},
+		{
+			name: "wildcard suffix",
+			patterns: []string{
+				"*/includes/{id}/*",
+			},
+			inputURL: "/something/prefix/includes/123/this/",
+			expectedVariables: map[string]string{
+				"id": "123",
+			},
+			expectedMatch: true,
+		},
+		{
+			name: "mismatched wildcard",
+			patterns: []string{
+				"*/includes/{id}/*",
+			},
+			inputURL:      "/something/prefix/notincluded/123/this/",
+			expectedMatch: false,
 		},
 	}
 

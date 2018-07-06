@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/pathvars"
+	"github.com/a-h/pathvars"
 )
 
 var matcher = pathvars.NewExtractor("/user/{userid}")

@@ -1,6 +1,9 @@
 package pathvars
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Segment is a path segment, e.g. in /users/{userid}/ there are two segments,
 // "users" and "{userid}". "{userid}" is a variable and will be captured.
@@ -10,9 +13,16 @@ type Segment struct {
 	IsWildcard bool
 }
 
+// String pretty prints the segment, for debugging.
+func (ps *Segment) String() string {
+	return fmt.Sprintf("{ Name: %v, IsVariable: %v, IsWildcard: %v }",
+		ps.Name, ps.IsVariable, ps.IsWildcard)
+}
+
 // Match on the string path segment.
-func (ps *Segment) Match(s string) (name string, capture bool, matches bool) {
+func (ps *Segment) Match(s string) (name string, capture bool, wildcard bool, matches bool) {
 	if ps.IsWildcard {
+		wildcard = true
 		matches = true
 		return
 	}

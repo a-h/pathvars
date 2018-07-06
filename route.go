@@ -1,6 +1,8 @@
 package pathvars
 
-import "strings"
+import (
+	"strings"
+)
 
 // Route is an array of segments.
 type Route []*Segment
@@ -31,13 +33,22 @@ func NewRoute(pattern string) *Route {
 
 // Match returns whether the route was matched, and extracts variables.
 func (r Route) Match(segments []string) (vars map[string]string, ok bool) {
-	if len(segments) != len(r) {
-		return
-	}
 	vars = make(map[string]string)
-	for i, inputSegment := range segments {
-		routeSegment := r[i]
-		name, capture, matches := routeSegment.Match(inputSegment)
+	var wildcard bool
+	for i := 0; i < len(r); i++ {
+		routeSegment := r[len(r)-1-i]
+		inputSegment := segments[len(segments)-1-i]
+		name, capture, wildcardMatch, matches := routeSegment.Match(inputSegment)
+		if matches {
+			if wildcardMatch {
+				wildcard = true
+			} else {
+				wildcard = false
+			}
+		}
+		if wildcard {
+			matches = true
+		}
 		if !matches {
 			return
 		}
