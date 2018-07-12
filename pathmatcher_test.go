@@ -104,6 +104,25 @@ func TestPathExtraction(t *testing.T) {
 			expectedMatch: true,
 		},
 		{
+			name: "multi-level wildcard prefix 3",
+			patterns: []string{
+				"*/thing/{userid}",
+			},
+			inputURL: "/thing/123",
+			expectedVariables: map[string]string{
+				"userid": "123",
+			},
+			expectedMatch: true,
+		},
+		{
+			name: "multi-level wildcard prefix 4",
+			patterns: []string{
+				"*/another/thing/{userid}",
+			},
+			inputURL:      "/thing/123",
+			expectedMatch: false,
+		},
+		{
 			name: "wildcard suffix",
 			patterns: []string{
 				"*/includes/{id}/*",

@@ -37,7 +37,11 @@ func (r Route) Match(segments []string) (vars map[string]string, ok bool) {
 	var wildcard bool
 	for i := 0; i < len(r); i++ {
 		routeSegment := r[len(r)-1-i]
-		inputSegment := segments[len(segments)-1-i]
+		inputSegmentIndex := len(segments) - 1 - i
+		var inputSegment string
+		if inputSegmentIndex > -1 {
+			inputSegment = segments[inputSegmentIndex]
+		}
 		name, capture, wildcardMatch, matches := routeSegment.Match(inputSegment)
 		if matches {
 			if wildcardMatch {
