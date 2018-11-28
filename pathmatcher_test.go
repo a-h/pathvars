@@ -1,7 +1,6 @@
 package pathvars
 
 import (
-	"net/url"
 	"reflect"
 	"testing"
 )
@@ -145,12 +144,7 @@ func TestPathExtraction(t *testing.T) {
 
 	for _, test := range tests {
 		e := NewExtractor(test.patterns...)
-		u, err := url.Parse(test.inputURL)
-		if err != nil {
-			t.Errorf("%s: failed to parse URL '%s' with error: %v", test.name, test.inputURL, err)
-			continue
-		}
-		actualVariables, actualMatch := e.Extract(u)
+		actualVariables, actualMatch := e.ExtractString(test.inputURL)
 		if actualMatch != test.expectedMatch {
 			t.Errorf("%s: expected match %v, got %v", test.name, test.expectedMatch, actualMatch)
 		}

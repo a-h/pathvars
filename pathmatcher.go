@@ -37,3 +37,12 @@ func (pm *Extractor) Extract(u *url.URL) (v map[string]string, ok bool) {
 	v = nil
 	return
 }
+
+// ExtractString extracts path variables from a string.
+func (pm *Extractor) ExtractString(s string) (v map[string]string, ok bool) {
+	u, err := url.Parse(s)
+	if err != nil {
+		return
+	}
+	return pm.Extract(u)
+}
