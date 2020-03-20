@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/a-h/pathvars"
+	"github.com/pathvars"
 )
 
 var matcher = pathvars.NewExtractor("/user/{userid}")
@@ -24,7 +24,7 @@ func main() {
 }
 ```
 
-### Example Output
+### Example Output
 
 ```
 $ go run main.go
