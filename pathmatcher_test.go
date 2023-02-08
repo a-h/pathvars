@@ -1,6 +1,7 @@
 package pathvars
 
 import (
+	"net/url"
 	"reflect"
 	"testing"
 )
@@ -150,6 +151,30 @@ func TestPathExtraction(t *testing.T) {
 		}
 		if !reflect.DeepEqual(actualVariables, test.expectedVariables) {
 			t.Errorf("%s: expected variables %v, got %v", test.name, test.expectedVariables, actualVariables)
+		}
+	}
+}
+
+func BenchmarkPathExtraction(b *testing.B) {
+	e := NewExtractor("/user/{userid}")
+	inputURL, err := url.Parse("/user/123")
+	if err != nil {
+		b.Fatalf("failed to parse URL: %v", err)
+	}
+	expectedVariables := map[string]string{
+		"userid": "123",
+	}
+	expectedMatch := true
+
+	b.ReportAllocs()
+
+	for n := 0; n < b.N; n++ {
+		actualVariables, actualMatch := e.Extract(inputURL)
+		if actualMatch != expectedMatch {
+			b.Fatalf("expected match %v, got %v", expectedMatch, actualMatch)
+		}
+		if !reflect.DeepEqual(actualVariables, expectedVariables) {
+			b.Fatalf("expected variables %v, got %v", expectedVariables, actualVariables)
 		}
 	}
 }
