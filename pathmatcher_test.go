@@ -141,17 +141,30 @@ func TestPathExtraction(t *testing.T) {
 			inputURL:      "/something/prefix/notincluded/123/this/",
 			expectedMatch: false,
 		},
+		{
+			name: "path encoded values are correctly decoded",
+			patterns: []string{
+				"/file/{filename}",
+			},
+			inputURL: "/file/this%20is%20a%20file.txt",
+			expectedVariables: map[string]string{
+				"filename": "this is a file.txt",
+			},
+			expectedMatch: true,
+		},
 	}
 
 	for _, test := range tests {
-		e := NewExtractor(test.patterns...)
-		actualVariables, actualMatch := e.ExtractString(test.inputURL)
-		if actualMatch != test.expectedMatch {
-			t.Errorf("%s: expected match %v, got %v", test.name, test.expectedMatch, actualMatch)
-		}
-		if !reflect.DeepEqual(actualVariables, test.expectedVariables) {
-			t.Errorf("%s: expected variables %v, got %v", test.name, test.expectedVariables, actualVariables)
-		}
+		t.Run(test.name, func(t *testing.T) {
+			e := NewExtractor(test.patterns...)
+			actualVariables, actualMatch := e.ExtractString(test.inputURL)
+			if actualMatch != test.expectedMatch {
+				t.Errorf("%s: expected match %v, got %v", test.name, test.expectedMatch, actualMatch)
+			}
+			if !reflect.DeepEqual(actualVariables, test.expectedVariables) {
+				t.Errorf("%s: expected variables %v, got %v", test.name, test.expectedVariables, actualVariables)
+			}
+		})
 	}
 }
 
