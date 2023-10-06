@@ -152,6 +152,17 @@ func TestPathExtraction(t *testing.T) {
 			},
 			expectedMatch: true,
 		},
+		{
+			name: "slashes in path encoded values are correctly decoded",
+			patterns: []string{
+				"/file/{filename}",
+			},
+			inputURL: "/file/this%2Fis%2Fa%2Ffile.txt",
+			expectedVariables: map[string]string{
+				"filename": "this/is/a/file.txt",
+			},
+			expectedMatch: true,
+		},
 	}
 
 	for _, test := range tests {
